@@ -8,7 +8,7 @@ const dbMock = require('./src/db/mock')
 const services = configureServices({ db: dbMock })
 configureServer({ app, db: dbMock, services })
 
-app.use(function(ctx) {
+app.use(ctx => {
   ctx.body = `
   <div>
   <a href="/graphql">/graphql</a>

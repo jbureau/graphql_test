@@ -7,12 +7,10 @@ const schema = require('./schema')
  * @param {Object} options
  * @param {Object} options.app Koa instance
  */
-const configureServer = function(options = {}) {
+const configureServer = (options = {}) => {
   const server = new ApolloServer({
     schema,
-    context: function() {
-      return { db: options.db, services: options.services }
-    }
+    context: () => ({ db: options.db, services: options.services })
   })
   server.applyMiddleware({ app: options.app, bodyParserConfig: koaBody() })
 }
