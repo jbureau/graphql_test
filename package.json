@@ -5,11 +5,17 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "start:local": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jbureau",
   "license": "ISC",
   "dependencies": {
-    "koa": "^2.11.0"
+    "apollo-server-koa": "^2.9.14",
+    "graphql": "^14.5.8",
+    "graphql-tools": "^4.0.6",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0"
   }
 }
