@@ -3,9 +3,12 @@ const { ApolloServer, gql } = require('apollo-server-koa')
 const Planet = require('./types/Planet')
 const SpaceCenter = require('./types/SpaceCenter')
 
+const PLANET_LIMIT = 5
+
+// TODO Default value not working
 const Query = gql`
   type Query {
-    planets: [Planet]
+    planets(limit: Int = PLANET_LIMIT): [Planet]
   }
 `
 
@@ -15,11 +18,15 @@ const SchemaDefinition = gql`
   }
 `
 
+const get = (props, object) =>
+  props.reduce((obj, prop) => (obj && obj[prop] ? obj[prop] : null), object)
+
 const resolvers = {
   Query: {
-    planets: function(obj, args, context, info) {
-      console.log(obj, args, context.db)
-      return [{ name: 'coucou' }]
+    planets: (obj, args, context, info) => {
+      const serviceFunc = get(['services', 'planet', 'getPlanetsWithSpaceCenters'], context)
+      if (serviceFunc) return context.services.planet.getPlanetsWithSpaceCenters(args.limit)
+      return []
     }
   }
 }

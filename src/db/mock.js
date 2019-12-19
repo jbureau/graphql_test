@@ -1,23 +1,36 @@
-const planetsList = require('./planets.json') || []
-const spaceCentersList = require('./space-centers.json') || []
+const data = require('./mockData')
 
-const planets = planetsList.reduce((map, planet) => {
-  if (planet) map[planet.code] = planet
-  return map
-}, {})
+/**
+ * Find all space centers for a planet
+ * @param {String} planetCode planet code
+ * @returns {Array.<Object>}
+ */
+const findAllSpaceCentersByPlanetCode = planetCode => {
+  const spaceCentersForPlanetCode = data.spaceCenters.byPlanetCode[planetCode]
+  const spaceCenters = data.spaceCenters.map
+  return spaceCentersForPlanetCode.reduce((list, id) => {
+    if (id && spaceCenters[id]) list.push(spaceCenters[id])
+    return list
+  }, [])
+}
 
-const spaceCenters = spaceCentersList.reduce((map, spaceCenter) => {
-  if (spaceCenter) map[spaceCenter.uid] = spaceCenter
-  return map
-}, {})
-
-const spaceCenterIdsByPlanetCode = spaceCentersList.reduce((map, spaceCenter) => {
-  if (spaceCenter) {
-    if (!map[spaceCenter.planet_code]) map[spaceCenter.planet_code] = []
-    map[spaceCenter.planet_code].push(spaceCenter.uid)
-  }
-  return map
-}, {})
+/**
+ * Find all planets
+ * @param {Object} options
+ * @param {number} options.limit limit of results
+ * @param {boolean} options.spaceCenters populate space centers
+ * @returns {Array.<Object>}
+ */
+const findAllPlanets = (options = {}) => {
+  let results = data.planets.list.filter(planet => planet)
+  if (options.limit) results = results.slice(0, options.limit)
+  if (options.spaceCenters)
+    results = results.map(planet => {
+      planet.spaceCenters = findAllSpaceCentersByPlanetCode(planet.code)
+      return planet
+    })
+  return results
+}
 
 /**
  * Database mock
@@ -25,21 +38,12 @@ const spaceCenterIdsByPlanetCode = spaceCentersList.reduce((map, spaceCenter) =>
  */
 const DBMock = {
   planets: {
-    findOneByCode: function(code) {
-      return planets[code]
-    }
+    findOneByCode: code => data.planets.map[code],
+    findAll: findAllPlanets
   },
   spaceCenters: {
-    findOne: function(uid) {
-      return spaceCenters[uid]
-    },
-    findAllByPlanetCode: function(planetCode) {
-      const spaceCentersForPlanetCode = spaceCenterIdsByPlanetCode[planetCode]
-      return spaceCentersForPlanetCode.reduce((list, id) => {
-        if (id && spaceCenters[id]) list.push(spaceCenters[id])
-        return list
-      }, [])
-    }
+    findOne: uid => data.spaceCenters.map[uid],
+    findAllByPlanetCode: findAllSpaceCentersByPlanetCode
   }
 }
 
