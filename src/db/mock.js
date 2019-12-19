@@ -1,4 +1,4 @@
-const data = require('./mockData')
+const data = require('./mockedData')
 
 /**
  * Find all space centers for a planet
