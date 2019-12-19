@@ -5,8 +5,12 @@ class PlanetService extends Service {
     super(options)
   }
 
-  getPlanetsWithSpaceCenters(limit) {
-    return this.dbInstance.planets.findAll({ limit, spaceCenters: true })
+  getPlanet(code) {
+    return this.dbInstance.planets.findOneByCode(code)
+  }
+
+  getPlanets() {
+    return this.dbInstance.planets.findAll()
   }
 }
 
