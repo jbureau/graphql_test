@@ -3,7 +3,7 @@ const { gql } = require('apollo-server-koa')
 const typeDefs = gql`
   type SpaceCenter {
     id: Int!
-    uid: ID!
+    uid: String!
     name: String
     description: String
     lagitude: Float

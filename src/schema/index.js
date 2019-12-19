@@ -1,7 +1,7 @@
 const { makeExecutableSchema } = require('graphql-tools')
 const { ApolloServer, gql } = require('apollo-server-koa')
-const Planet = require('./Planet')
-const SpaceCenter = require('./SpaceCenter')
+const Planet = require('./types/Planet')
+const SpaceCenter = require('./types/SpaceCenter')
 
 const Query = gql`
   type Query {
