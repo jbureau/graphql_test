@@ -15,6 +15,16 @@ const SchemaDefinition = gql`
   }
 `
 
+const resolvers = {
+  Query: {
+    planets: function(obj, args, context, info) {
+      console.log(obj, args, context.db)
+      return [{ name: 'coucou' }]
+    }
+  }
+}
+
 module.exports = makeExecutableSchema({
-  typeDefs: [SchemaDefinition, Query, Planet.typeDefs, SpaceCenter.typeDefs]
+  typeDefs: [SchemaDefinition, Query, Planet.typeDefs, SpaceCenter.typeDefs],
+  resolvers
 })

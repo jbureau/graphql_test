@@ -6,7 +6,7 @@ const typeDefs = gql`
     uid: String!
     name: String
     description: String
-    lagitude: Float
+    latitude: Float
     longitude: Float
   }
 `

@@ -1,12 +1,12 @@
 const Koa = require('koa')
-const koaBody = require('koa-bodyparser')
+const { configureServer } = require('./src/AppServer')
+const { configureServices } = require('./src/services')
+
 const app = new Koa()
-const { ApolloServer } = require('apollo-server-koa')
 
-const schema = require('./src/schema')
-
-const server = new ApolloServer({ schema })
-server.applyMiddleware({ app, bodyParserConfig: koaBody() })
+const dbMock = require('./src/db/mock')
+const services = configureServices({ db: dbMock })
+configureServer({ app, db: dbMock, services })
 
 app.use(function(ctx) {
   ctx.body = `
