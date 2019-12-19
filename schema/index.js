@@ -1,18 +1,20 @@
-const Router = require('koa-router')
 const { makeExecutableSchema } = require('graphql-tools')
-const { ApolloServer } = require('apollo-server-koa')
+const { ApolloServer, gql } = require('apollo-server-koa')
+const Planet = require('./Planet')
+const SpaceCenter = require('./SpaceCenter')
 
-const router = new Router()
-
-const typeDefs = `
-  type Query { books: [Book] }
-  type Book { title: String, author: String }
+const Query = gql`
+  type Query {
+    planets: [Planet]
+  }
 `
 
-const resolvers = {
-  Query: {
-    books: () => {}
+const SchemaDefinition = gql`
+  schema {
+    query: Query
   }
-}
+`
 
-module.exports = makeExecutableSchema({ typeDefs, resolvers })
+module.exports = makeExecutableSchema({
+  typeDefs: [SchemaDefinition, Query, Planet.typeDefs, SpaceCenter.typeDefs]
+})
